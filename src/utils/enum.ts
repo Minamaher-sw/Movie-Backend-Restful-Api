@@ -8,6 +8,7 @@ export enum PeopleRole {
 export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
 }
 
 export enum SubscriptionType {
@@ -26,4 +27,9 @@ export enum PaymentMethod {
   CARD = 'CARD',
   PAYPAL = 'PAYPAL',
   WALLET = 'WALLET',
+}
+
+export enum CouponType {
+  PERCENTAGE = 'PERCENTAGE',
+  FIXED_AMOUNT = 'FIXED_AMOUNT',
 }
