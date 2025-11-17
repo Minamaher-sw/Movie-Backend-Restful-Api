@@ -4,8 +4,8 @@ import { Controller, Get, HttpStatus, NotFoundException, Param, ParseFilePipeBui
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
-import { FileSizeValidationPipe } from 'src/common/File Validation/FileSizeValidationPipe';
-import { uploadOptions } from 'src/utils/upload.options';
+import { FileSizeValidationPipe } from '../../common/File Validation/FileSizeValidationPipe';
+import { uploadOptions } from '../../utils/upload.options';
 import { uplaodImageDto } from './dto/upload-image.dto';
 import { uploadImagesDto } from './dto/upload-images.dto';
 

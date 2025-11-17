@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { UploadController } from './upload.controller';
 import { MulterModule } from '@nestjs/platform-express';
-import { uploadOptions } from 'src/utils/upload.options';
+import { uploadOptions } from '../../utils/upload.options';
 
 @Module({
   controllers: [UploadController],
