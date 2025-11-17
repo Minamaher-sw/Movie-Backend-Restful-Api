@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { CloudinaryController } from './cloudinary.controller';
 import { CloudinaryService } from './cloudinary.service';
-import { cloudinaryProvider } from 'src/config/cloudinary/cloudinary.config';
+import { cloudinaryProvider } from '../../config/cloudinary/cloudinary.config';
 
 
 @Module({
