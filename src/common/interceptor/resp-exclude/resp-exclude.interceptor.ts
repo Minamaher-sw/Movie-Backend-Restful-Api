@@ -9,7 +9,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { userInfo } from 'os';
 import { map, Observable, tap } from 'rxjs';
-import { UserEntity } from 'src/moduls/user/entities/user.entity';
+import { UserEntity } from '../../../moduls/user/entities/user.entity';
 
 @Injectable()
 export class RespExcludeInterceptor implements NestInterceptor {
@@ -20,14 +20,26 @@ export class RespExcludeInterceptor implements NestInterceptor {
         res.data = res.data.map((item: UserEntity) => {
           console.log("RespExcludeInterceptor item before exclude" , item);
           const { password , role, ...rest } = item;
-          return rest;
+          return {
+            success: res.success,
+            message: res.message,
+            data: rest,
+          };
         });
       } else {
         console.log("RespExcludeInterceptor item before exclude" , res);
         const { password, role , ...rest } = res.data;
-        return rest;
+        return {
+          success: res.success,
+          message: res.message,
+          data: rest,
+        };
       }
-      return res;
+      return {
+        success: res.success,
+        message: res.message,
+        data: res.data,
+      };
     }));
   }
 }

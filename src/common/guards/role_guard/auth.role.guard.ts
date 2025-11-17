@@ -8,13 +8,16 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { CURRENT_USER_kEY } from 'src/utils/constants';
-import { UserRole } from 'src/utils/enum';
-import { AccessTokenType, JwtPayloadType } from 'src/utils/types';
+import { CURRENT_USER_kEY } from '../../../utils/constants';
+import { UserRole } from '../../../utils/enum';
+import { AccessTokenType, JwtPayloadType } from '../../../utils/types';
 
 @Injectable()
 export class AuthRoleGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService, private readonly configService: ConfigService, private readonly reflector: Reflector) { }
+  constructor(
+    private readonly jwtService: JwtService, 
+    private readonly configService: ConfigService, 
+    private readonly reflector: Reflector) { }
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean> {
@@ -24,7 +27,6 @@ export class AuthRoleGuard implements CanActivate {
     }
     const request: Request = context.switchToHttp().getRequest();
     const token: AccessTokenType = request.cookies?.['access_token'] || request.headers['authorization'];
-    console.log('Token from AuthGuard:', token);
     if (!token) {
       throw new UnauthorizedException('No token provided');
     }
