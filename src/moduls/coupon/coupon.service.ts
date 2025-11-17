@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { CouponEntity } from './entity/coupon.entity';
 import { CreateCouponDto } from './dto/create.coupon.dot';
 import { UpdateCouponDto } from './dto/update.coupon.dto';
-import { isValidUUID } from 'src/utils/check_id_uuid';
+import { isValidUUID } from '../../utils/check_id_uuid';
 
 @Injectable()
 export class CouponService {

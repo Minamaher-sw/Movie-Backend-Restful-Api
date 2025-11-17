@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserCouponsEntity } from 'src/moduls/user-coupon/entity/user_coupons.entity';
+import { UserCouponsEntity } from '../../../moduls/user-coupon/entity/user_coupons.entity';
 
 /** CouponEntity - represents a discount coupon in the system */
 @Entity({ name: 'coupons' })

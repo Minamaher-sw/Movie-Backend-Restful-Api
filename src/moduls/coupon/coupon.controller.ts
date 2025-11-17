@@ -6,10 +6,10 @@ import { CreateCouponDto } from './dto/create.coupon.dot';
 import { CouponEntity } from './entity/coupon.entity';
 import { ApiParam, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { UpdateCouponDto } from './dto/update.coupon.dto';
-import { isValidUUID } from 'src/utils/check_id_uuid';
-import { UserRole } from 'src/utils/enum';
-import { AuthRoleGuard } from 'src/common/guards/role_guard/auth.role.guard';
-import { Role } from 'src/common/decrators/user-role/user-role.decorator';
+import { isValidUUID } from '../../utils/check_id_uuid';
+import { UserRole } from '../../utils/enum';
+import { AuthRoleGuard } from '../../common/guards/role_guard/auth.role.guard';
+import { Role } from '../../common/decrators/user-role/user-role.decorator';
 
 @Controller('api/v1/coupon')
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
