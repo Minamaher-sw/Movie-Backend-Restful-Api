@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { PaymentMethod, PaymentStatus } from 'src/utils/enum';
-import { UserEntity } from 'src/moduls/user/entities/user.entity';
-import { SubscriptionEntity } from 'src/moduls/subscription/entity/subscription.entity';
+import { PaymentMethod, PaymentStatus } from '../../../utils/enum';
+import { UserEntity } from '../../../moduls/user/entities/user.entity';
+import { SubscriptionEntity } from '../../../moduls/subscription/entity/subscription.entity';
 
 /**
  * DTO for returning payment details in API responses.

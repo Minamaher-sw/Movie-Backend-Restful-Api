@@ -8,7 +8,7 @@ import {
     Min,
     Length,
 } from 'class-validator';
-import { PaymentMethod, PaymentStatus } from 'src/utils/enum';
+import { PaymentMethod, PaymentStatus } from '../../../utils/enum';
 
 /**
  * DTO for creating a new payment record.
