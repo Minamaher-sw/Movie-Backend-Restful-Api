@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import { ApiProperty } from "@nestjs/swagger";
-import { MovieEntity } from "src/moduls/movie/entity/movie.entity";
+import { MovieEntity } from "../moduls/movie/entity/movie.entity";
 
 export class MovieListResponse {
 

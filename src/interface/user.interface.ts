@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { UserEntity } from "src/moduls/user/entities/user.entity";
+import { UserEntity } from "../moduls/user/entities/user.entity";
 
 
 export interface UserListResponse {

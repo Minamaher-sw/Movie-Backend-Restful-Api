@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { RatingEntity } from "src/moduls/rating/entity/rating.entity";
+import { RatingEntity } from "../moduls/rating/entity/rating.entity";
 
 export class RatingListResponse {
   success: boolean;
