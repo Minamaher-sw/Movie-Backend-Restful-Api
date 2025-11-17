@@ -5,7 +5,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { AccessTokenType } from 'src/utils/types';
+import { AccessTokenType } from '../../utils/types';
 import { UserService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
