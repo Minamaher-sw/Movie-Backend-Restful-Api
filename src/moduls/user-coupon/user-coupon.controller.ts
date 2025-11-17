@@ -3,13 +3,13 @@ import { Body, Controller, Get, Param, Post, Query, UseGuards, UsePipes, Validat
 import { UserCouponService } from './user-coupon.service';
 import { UserCouponsEntity } from './entity/user_coupons.entity';
 import { CreateUserCouponDto } from './dto/create-user-cupon.dto';
-import { UserRole } from 'src/utils/enum';
+import { UserRole } from '../../utils/enum';
 
-import type { JwtPayloadType } from 'src/utils/types';
+import type { JwtPayloadType } from '../../utils/types';
 import { UpdateUserCouponDto } from './dto/update-user-cupon.dto';
-import { Role } from 'src/common/decrators/user-role/user-role.decorator';
-import { AuthRoleGuard } from 'src/common/guards/role_guard/auth.role.guard';
-import { CurrentUser } from 'src/common/decrators/currentuser/currentuser.decorator';
+import { Role } from '../../common/decrators/user-role/user-role.decorator';
+import { AuthRoleGuard } from '../../common/guards/role_guard/auth.role.guard';
+import { CurrentUser } from '../../common/decrators/currentuser/currentuser.decorator';
 
 @Controller('api/v1/usercoupon')
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))

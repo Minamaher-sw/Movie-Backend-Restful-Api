@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/moduls/user/entities/user.entity';
-import { CouponEntity } from 'src/moduls/coupon/entity/coupon.entity';
+import { UserEntity } from '../../../moduls/user/entities/user.entity';
+import { CouponEntity } from '../../../moduls/coupon/entity/coupon.entity';
 
 /** UserCoupons - tracks coupon redemptions by users */
 @Entity({ name: 'user_coupons' })

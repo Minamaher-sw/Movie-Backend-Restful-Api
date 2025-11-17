@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserCouponsEntity } from './entity/user_coupons.entity';
 import { Repository } from 'typeorm';
 
-import { JwtPayloadType } from 'src/utils/types';
+import { JwtPayloadType } from '../../utils/types';
 import { CouponService } from '../coupon/coupon.service';
 import { UserService } from '../user/user.service';
 
