@@ -8,9 +8,9 @@ import {
     OneToMany,
 } from 'typeorm';
 import { ApiProperty as ApiProperty6 } from '@nestjs/swagger';
-import { SubscriptionType } from 'src/utils/enum';
-import { UserEntity } from 'src/moduls/user/entities/user.entity';
-import { PaymentEntity } from 'src/moduls/payment/entity/payment.entity';
+import { SubscriptionType } from '../../../utils/enum';
+import { UserEntity } from '../../../moduls/user/entities/user.entity';
+import { PaymentEntity } from '../../../moduls/payment/entity/payment.entity';
 
 
 /** SubscriptionEntity - user subscription records */
