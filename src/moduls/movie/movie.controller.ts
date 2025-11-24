@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prettier/prettier */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -33,10 +34,10 @@ import { MovieListResponse, MovieSingleResponse } from '../../interface/movie.in
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Movies')
-@Controller('api/v1/movies')
+@Controller('movies')
 @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 export class MovieController {
-  constructor(private readonly movieService: MovieService) {}
+  constructor(private readonly movieService: MovieService) { }
 
   /**
    * Create a new movie (Admin only)
@@ -58,7 +59,7 @@ export class MovieController {
     return {
       success: true,
       message: 'Movie created successfully',
-      movie: newMovie ,
+      movie: newMovie,
     };
   }
 
@@ -92,31 +93,34 @@ export class MovieController {
    */
   @Get()
   @ApiOperation({ summary: 'Get all movies with filtering & pagination' })
-  @ApiQuery({ name: 'title', required: false, type: String , description: 'Filter by movie title' })
+  @ApiQuery({ name: 'title', required: false, type: String, description: 'Filter by movie title' })
   @ApiQuery({ name: 'genre', required: false, type: String })
   @ApiQuery({ name: 'releaseDate', required: false, type: String })
   @ApiQuery({ name: 'sortBy', required: false, type: String })
   @ApiQuery({ name: 'sortOrder', required: false, type: String })
   @ApiQuery({ name: 'page', required: false, type: String })
-  @ApiQuery({name : "limit" , required: false , type: String})
+  @ApiQuery({ name: "limit", required: false, type: String })
   @ApiResponse({
     status: 200,
     description: 'Movies fetched successfully',
     type: MovieListResponse,
   })
-  @Throttle({movie :{
-    ttl:60000,
-    limit:30
-  }})
+  @Throttle({
+    movie: {
+      ttl: 60000,
+      limit: 30
+    }
+  })
   public async getAllMovies(
     @Query() query: MovieQueryDto,
   ): Promise<MovieListResponse> {
-    const movies = await this.movieService.findAll(query);
+    const data = await this.movieService.findAll(query);
     return {
       success: true,
       message: 'Movies fetched successfully',
-      count: movies.length,
-      movies,
+      movies: data.movies,
+      total: data.total,
+      pages: data.pages,
     };
   }
 
@@ -162,7 +166,11 @@ export class MovieController {
     @Param('id') id: string,
   ): Promise<{ success: boolean; message: string; movie: MovieEntity }> {
     const movie = await this.movieService.findById(id);
+    if (movie.isActive === false) {
+      throw new BadRequestException('Movie is already inactive. Cannot perform soft delete.');
+    }
     movie.isActive = false;
+    movie.deletedAt = new Date();
     const deletedMovie = await this.movieService.update(id, movie);
     return {
       success: true,
