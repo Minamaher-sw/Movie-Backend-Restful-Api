@@ -24,11 +24,11 @@ export class CreateUserDto {
   @Matches(nameRegex, { message: 'Last name can only contain letters and spaces' })
   lastName: string;
 
-  // @ApiProperty({ example: 'mina123', description: 'Unique username for the user' })
-  // @IsString({ message: 'Username must be a string' })
-  // @Length(3, 50, { message: 'Username must be between 3 and 50 characters' })
-  // @Matches(nameRegex, { message: 'Username can only contain letters and spaces' })
-  // username: string;
+  @ApiProperty({ example: 'mina123', description: 'Unique username for the user' })
+  @IsString({ message: 'Username must be a string' })
+  @Length(3, 50, { message: 'Username must be between 3 and 50 characters' })
+  @Matches(nameRegex, { message: 'Username can only contain letters and spaces' })
+  username: string;
 
   @ApiProperty({ example: 'mina@example.com', description: 'Unique user email' })
   @IsEmail({}, { message: 'Invalid email format' })
