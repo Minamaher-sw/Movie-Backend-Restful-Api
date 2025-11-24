@@ -40,17 +40,23 @@ export class PaymentEntity {
     @Column7({ type: 'varchar', length: 255, nullable: true, unique: true })
     transaction_id?: string;
 
+    @Column7({ type: 'varchar', length: 255, nullable: true })
+    @ApiProperty7({ example: 'cs_test_123456', description: 'Stripe checkout session ID', required: false })
+    checkout_session_id?: string;
+    
     @Column7({ type: 'varchar', length: 50, nullable: true })
     @ApiProperty7({ example: 'monthly', description: 'Billing cycle', required: false })
     billing_cycle?: string; // e.g. 'monthly', 'yearly'
-    
+
     @ApiProperty7({ example: '2025-10-02T00:00:00Z', description: 'Payment timestamp' })
     @CreateDateColumn7({ type: 'timestamp' })
     payment_date: Date;
 
-    @ManyToOne(() => UserEntity, (user) => user.payments)
+    @ApiProperty7({description:"User who made the payment" , type:() => UserEntity})
+    @ManyToOne(() => UserEntity, (user) => user.payments, { nullable: false })
     user: UserEntity;
 
-    @ManyToOne(() => SubscriptionEntity, { onDelete: 'SET NULL', nullable: true })
+    @ApiProperty7({description:"Subscription associated with the payment", type:() => SubscriptionEntity})
+    @ManyToOne(() => SubscriptionEntity, (subscription) => subscription.payments, { nullable: true, onDelete: 'SET NULL' })
     subscription?: SubscriptionEntity;
 }
