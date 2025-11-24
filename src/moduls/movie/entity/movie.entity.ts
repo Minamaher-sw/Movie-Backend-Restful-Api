@@ -8,6 +8,7 @@ import {
     DeleteDateColumn,
     OneToMany,
     ManyToMany,
+    JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { MoviePeopleEntity } from '../../movie-people/entity/movie_people.entity';
@@ -90,13 +91,16 @@ export class MovieEntity {
     deletedAt?: Date;
 
     /* Relations */
-    @ManyToMany(() => GenreEntity, (movie) => movie.movies ,{nullable:true })
+    @ApiProperty({ description: 'Genres associated with this movie', type: () => [GenreEntity] })
+    @JoinTable({ name: "movie_genres" })
+    @ManyToMany(() => GenreEntity, (movie) => movie.movies ,{cascade:true,onDelete:'CASCADE'})
     genres: GenreEntity[];
 
+    @ApiProperty({ description: 'People associated with this movie', type: () => [MoviePeopleEntity] })
     @OneToMany(() => MoviePeopleEntity,(moviePeople)=> moviePeople.movie)
     people: MoviePeopleEntity[];
 
+    @ApiProperty({ description: 'Ratings associated with this movie', type: () => [RatingEntity] })
     @OneToMany(() => RatingEntity, (rating) => rating.movie)
     ratings: RatingEntity[];
-  id: any;
 }
