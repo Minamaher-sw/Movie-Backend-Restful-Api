@@ -47,10 +47,11 @@ export class RatingEntity {
     @DeleteDateColumn({ type: 'timestamp', nullable: true })
     deletedAt?: Date;
 
+    @ApiProperty({ example: 'User associated with the rating', description: 'User associated with the rating' ,type: () => UserEntity }   )
     @ManyToOne(() => UserEntity, (user) => user.ratings, { onDelete: 'CASCADE' , nullable: false ,onUpdate: 'CASCADE' })
     user: UserEntity;
 
-    @ApiProperty({ example: 'Movie associated with the rating', description: 'Movie associated with the rating' }   )
+    @ApiProperty({ example: 'Movie associated with the rating', description: 'Movie associated with the rating' ,type: () => MovieEntity }   )
     @ManyToOne(() => MovieEntity, (movie) => movie.ratings, { onDelete: 'CASCADE' , nullable: false ,onUpdate: 'CASCADE' })
     movie: MovieEntity;
 }
