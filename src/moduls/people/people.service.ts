@@ -3,8 +3,9 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PeopleEntity } from './entity/people.entity';
 import { Repository } from 'typeorm';
+
+import { PeopleEntity } from './entity/people.entity';
 import { PeopleResponseDto } from './dto/people-response.dto';
 import { CreatePeopleDto } from './dto/create-people.dto';
 import { UpdatePeopleDto } from './dto/update-people.dto';
@@ -15,14 +16,16 @@ export class PeopleService {
     constructor(
         @InjectRepository(PeopleEntity)
         private readonly peopleRepository: Repository<PeopleEntity>,
-    ) { }
+    ) {}
 
     /**
-     * Create a new person record.
-     * @param createPeopleDto Data for the new person
+     * @summary Create a new person
+     * @description Creates a new person record and validates username uniqueness.
+     * @param {CreatePeopleDto} createPeopleDto
+     * @returns {Promise<PeopleResponseDto>}
+     * @throws {ConflictException} If username already exists
      */
     public async createPerson(createPeopleDto: CreatePeopleDto): Promise<PeopleResponseDto> {
-        // Check if username is already used
         const existing = await this.peopleRepository.findOne({
             where: { username: createPeopleDto.username },
         });
@@ -32,10 +35,15 @@ export class PeopleService {
         }
 
         const newPerson = this.peopleRepository.create(createPeopleDto);
-        const savedPerson = await this.peopleRepository.save(newPerson);
-        return savedPerson as PeopleResponseDto;
+        return (await this.peopleRepository.save(newPerson)) as PeopleResponseDto;
     }
 
+    /**
+     * @summary Get list of people
+     * @description Supports filtering, sorting, and pagination.
+     * @param {PeopleQuery} query
+     * @returns Paginated list of people
+     */
     public async findAll(query: PeopleQuery): Promise<{ data: PeopleResponseDto[]; total: number; page: number; limit: number }> {
         const {
             first_name,
@@ -48,51 +56,43 @@ export class PeopleService {
             limit = 10,
         } = query;
 
-        const skip = (page - 1) * limit;
-
-        // Build the query using QueryBuilder
         const qb = this.peopleRepository.createQueryBuilder('people')
             .leftJoinAndSelect('people.moviepeople', 'movie_people');
 
-        // Filtering
-        if (first_name) qb.andWhere('people.first_name ILIKE :first_name', { first_name: `%${first_name}%` });
-        if (last_name) qb.andWhere('people.last_name ILIKE :last_name', { last_name: `%${last_name}%` });
-        if (username) qb.andWhere('people.username ILIKE :username', { username: `%${username}%` });
-        if (nationality) qb.andWhere('people.nationality ILIKE :nationality', { nationality: `%${nationality}%` });
+        if (first_name) qb.andWhere('people.first_name LIKE :first', { first: `%${first_name}%` });
+        if (last_name) qb.andWhere('people.last_name LIKE :last', { last: `%${last_name}%` });
+        if (username) qb.andWhere('people.username LIKE :username', { username: `%${username}%` });
+        if (nationality) qb.andWhere('people.nationality LIKE :nat', { nat: `%${nationality}%` });
 
-        // Sorting
         qb.orderBy(`people.${sortBy}`, sortOrder);
+        qb.skip((page - 1) * limit).take(limit);
 
-        // Pagination
-        qb.skip(skip).take(limit);
-
-        // Execute query
         const [data, total] = await qb.getManyAndCount();
-
         return { data: data as PeopleResponseDto[], total, page, limit };
     }
+
     /**
-     * Find a person by ID.
-     * @param person_id UUID of the person
-     * @throws NotFoundException if person is not found
+     * @summary Get person by ID
+     * @param {string} person_id
+     * @returns {Promise<PeopleResponseDto>}
+     * @throws {NotFoundException}
      */
     public async findOneById(person_id: string): Promise<PeopleResponseDto> {
         const person = await this.peopleRepository.findOne({
             where: { person_id },
-            relations: ['movie_people'],
+            relations: ['moviepeople'],
         });
 
-        if (!person) {
-            throw new NotFoundException(`Person with ID "${person_id}" not found.`);
-        }
+        if (!person) throw new NotFoundException(`Person with ID "${person_id}" not found.`);
 
         return person as PeopleResponseDto;
     }
 
     /**
-     * Find a person by username.
-     * @param username The username of the person to find.
-     * @throws NotFoundException if no person with the given username is found.
+     * @summary Get person by username
+     * @param {string} username
+     * @returns {Promise<PeopleResponseDto>}
+     * @throws {NotFoundException}
      */
     public async findByUsername(username: string): Promise<PeopleResponseDto> {
         const person = await this.peopleRepository.findOne({
@@ -100,60 +100,39 @@ export class PeopleService {
             relations: ['movie_people'],
         });
 
-        if (!person) {
-            throw new NotFoundException(`Person with username "${username}" not found.`);
-        }
+        if (!person) throw new NotFoundException(`Person with username "${username}" not found.`);
 
         return person as PeopleResponseDto;
     }
 
     /**
-     * Update a person's information.
-     * @param person_id UUID of the person to update
-     * @param updatePeopleDto Fields to update
-     * @throws NotFoundException if person is not found
+     * @summary Update person by ID
+     * @param {string} person_id
+     * @param {UpdatePeopleDto} updatePeopleDto
      */
-    public async updatePersonById(
-        person_id: string,
-        updatePeopleDto: UpdatePeopleDto,
-    ): Promise<PeopleResponseDto> {
+    public async updatePersonById(person_id: string, updatePeopleDto: UpdatePeopleDto): Promise<PeopleResponseDto> {
         const person = await this.findOneById(person_id);
-        if (!person) {
-            throw new NotFoundException(`Person with ID "${person_id}" not found.`);
-        }
         const updated = Object.assign(person, updatePeopleDto);
-        const saved = await this.peopleRepository.save(updated);
-        return saved as PeopleResponseDto;
-    }
-     /**
-     * Update a person's information.
-     * @param person_id UUID of the person to update
-     * @param updatePeopleDto Fields to update
-     * @throws NotFoundException if person is not found
-     */
-    public async updatePersonByUsername(
-        username: string,
-        updatePeopleDto: UpdatePeopleDto,
-    ): Promise<PeopleResponseDto> {
-        const person = await this.findByUsername(username);
-        if (!person) {
-            throw new NotFoundException(`Person with username "${username}" not found.`);
-        }
-        const updated = Object.assign(person, updatePeopleDto);
-        const saved = await this.peopleRepository.save(updated);
-        return saved as PeopleResponseDto;
+        return (await this.peopleRepository.save(updated)) as PeopleResponseDto;
     }
 
     /**
-     * Delete a person from the database.
-     * @param person_id UUID of the person to delete
-     * @throws NotFoundException if person does not exist
+     * @summary Update person by username
+     * @param {string} username
+     * @param {UpdatePeopleDto} updatePeopleDto
+     */
+    public async updatePersonByUsername(username: string, updatePeopleDto: UpdatePeopleDto): Promise<PeopleResponseDto> {
+        const person = await this.findByUsername(username);
+        const updated = Object.assign(person, updatePeopleDto);
+        return (await this.peopleRepository.save(updated)) as PeopleResponseDto;
+    }
+
+    /**
+     * @summary Delete person by ID
+     * @param {string} person_id
      */
     public async deletePerson(person_id: string): Promise<{ message: string }> {
         const person = await this.findOneById(person_id);
-        if (!person) {
-            throw new NotFoundException(`Person with ID "${person_id}" not found.`);
-        }
         await this.peopleRepository.remove(person);
         return { message: `Person with ID "${person_id}" has been deleted successfully.` };
     }
