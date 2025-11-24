@@ -11,5 +11,6 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [GenersController],
   providers: [GenersService],
   imports: [TypeOrmModule.forFeature([GenreEntity]) ,AuthModule ,JwtModule],
+  exports: [GenersService],
 })
 export class GenersModule {}
