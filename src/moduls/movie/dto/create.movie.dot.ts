@@ -11,9 +11,21 @@ import {
   IsBoolean,
   Length,
   Matches,
+  IsArray,
+  IsUUID,
+  ArrayNotEmpty,
 } from 'class-validator';
+import { PeopleRole } from '../../../utils/enum';
 
 /**
+ * {
+  "title": "...",
+  "genreIds": ["..."],
+  "people": [
+    { "person_id": "uuid1", "role": "ACTOR" },
+    { "person_id": "uuid2", "role": "DIRECTOR" }
+  ]
+}
  * DTO used for creating a new movie record.
  * Matches the MovieEntity structure.
  */
@@ -40,7 +52,7 @@ export class CreateMovieDto {
   @ApiProperty({
     example:
       'A thief who steals corporate secrets through dream-sharing technology...',
-      required: true,
+    required: true,
     description: 'Detailed movie description or synopsis',
   })
   @IsString({ message: 'Description must be a string' })
@@ -156,4 +168,30 @@ export class CreateMovieDto {
   @IsOptional()
   @IsBoolean({ message: 'isActive must be a boolean value' })
   isActive?: boolean;
+
+  @ApiProperty({
+    example: ['genre-id-1', 'genre-id-2'],
+    description: 'List of genre IDs associated with the movie',
+    required: true,
+  })
+  @IsArray()
+  @ArrayNotEmpty({ message: 'genreIds cannot be empty' })
+  @IsUUID('all', { each: true })
+  genreIds: string[];
+
+  @ApiProperty({
+    example: [
+      { person_id: 'person-uuid-1', role: PeopleRole.DIRECTOR },
+      { person_id: 'person-uuid-2', role: PeopleRole.ACTOR },
+    ],
+    description: 'List of people associated with the movie along with their roles',
+    required: false,
+  })
+
+  @IsOptional()
+  people?: {
+    person_id: string;
+    role: PeopleRole;
+  }[];
+
 }
