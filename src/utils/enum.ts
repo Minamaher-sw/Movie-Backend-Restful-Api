@@ -15,12 +15,19 @@ export enum SubscriptionType {
   FREE = 'FREE',
   BASIC = 'BASIC',
   PREMIUM = 'PREMIUM',
+  FAMILY = 'FAMILY',
+  STANDARD = 'STANDARD',
+  STUDENT = 'STUDENT',
+  LITE="LITE"
 }
 
 export enum PaymentStatus {
   PENDING = 'PENDING',
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
+  CANCELED = 'CANCELED',
+  EXPIRED = 'EXPIRED',
+  REFUNDED = 'REFUNDED',
 }
 
 export enum PaymentMethod {
@@ -32,4 +39,11 @@ export enum PaymentMethod {
 export enum CouponType {
   PERCENTAGE = 'PERCENTAGE',
   FIXED_AMOUNT = 'FIXED_AMOUNT',
+}
+
+export enum StreamingQuality {
+  SD = 'SD',
+  HD = 'HD',
+  FULL_HD = 'FULL_HD',
+  UHD_4K = 'UHD_4K',
 }
