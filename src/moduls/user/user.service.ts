@@ -12,10 +12,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtPayloadType } from '../../utils/types';
-import { UserRole } from '../../utils/enum';
+import { SubscriptionType, UserRole } from '../../utils/enum';
 import { AuthProvider } from './auth.provider';
 import { join } from 'node:path';
 import { unlinkSync } from 'node:fs';
+import { randomBytes } from 'node:crypto';
 @Injectable()
 export class UserService {
 
@@ -32,7 +33,17 @@ export class UserService {
 
   // Create User
   public async create(user: CreateUserDto) {
-    const newUser = this.userRepo.create(user);
+    const { email, password } = user;
+    const existingUser = await this.userRepo.findOne({ where: { email } });
+    if (existingUser) {
+      throw new NotFoundException(`User with email ${email} already exists`);
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const verificationToken = randomBytes(32).toString('hex');
+    const newUser = this.userRepo.create({ ...user, password: hashPassword, verificationToken });
     return await this.userRepo.save(newUser);
   }
 
@@ -126,13 +137,14 @@ export class UserService {
     const user = await this.getCurrentUser(user_id);
     if (!user) throw new NotFoundException('User not found');
 
-    if(user.avatar === null){
+    console.log('Current avatar:', user.avatar);
+    if (user.avatar === null) {
       user.avatar = newProfileImage;
     }
-    else{
+    else {
       await this.removeProfileImage(user_id);
       user.avatar = newProfileImage;
-    } 
+    }
     return await this.userRepo.save(user);
   }
 
@@ -144,6 +156,12 @@ export class UserService {
     const imgPath = join(process.cwd(), 'images', user.avatar);
     unlinkSync(imgPath);
     user.avatar = null;
+    return await this.userRepo.save(user);
+  }
+
+  public async updateUserSubscriptionType(userId: string, subscriptionType: SubscriptionType): Promise<UserEntity> {
+    const user = await this.findById(userId);
+    user.subscriptionType = subscriptionType;
     return await this.userRepo.save(user);
   }
 }
