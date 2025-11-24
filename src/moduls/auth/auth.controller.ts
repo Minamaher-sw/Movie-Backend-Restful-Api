@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 
 @ApiTags('Authentication')
-@Controller('api/v1/auth')
+@Controller('auth')
 export class AuthController {
   private cookieOptions: { [key: string]: any };
 
