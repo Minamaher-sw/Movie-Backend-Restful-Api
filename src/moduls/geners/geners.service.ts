@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenreEntity } from './entity/genre.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Like } from 'typeorm';
 import { CreateGenreDto } from './dto/create.geners.dot';
 import { UpdateGenreDto } from './dto/update.geners.dto';
 
@@ -16,10 +18,10 @@ export class GenersService {
     private readonly genreRepository: Repository<GenreEntity>,
   ) {}
 
-  async findAll(query: any): Promise<GenreEntity[]> {
+  async findAll(query: any): Promise<{ data: GenreEntity[]; total: number; pages: number; currentPage: number }> {
     const filters = {
       ...(query.name && { name: query.name }),
-      ...(query.description && { description: query.description }),
+      ...(query.description && { description: Like(`%${query.description}%`) }),
     };
 
     const sort = {
@@ -29,7 +31,7 @@ export class GenersService {
     const skip = query.page && query.limit ? (query.page - 1) * query.limit : 0;
     const take = query.limit ? query.limit : 10;
 
-    const genres = await this.genreRepository.find({
+    const [genres,total] = await this.genreRepository.findAndCount({
       where: filters,
       order: sort,
       skip,
@@ -40,7 +42,12 @@ export class GenersService {
       throw new NotFoundException('No genres found');
     }
 
-    return genres;
+    return {
+      data: genres,
+      total,
+      pages: Math.ceil(total / take),
+      currentPage: query.page ? parseInt(query.page) : 1,
+    };
   }
 
   async findById(genreId: string): Promise<GenreEntity> {
