@@ -12,5 +12,6 @@ import { uploadOptions } from '../../utils/upload.options';
   controllers: [PeopleController],
   providers: [PeopleService],
   imports: [TypeOrmModule.forFeature([PeopleEntity]), JwtModule ,MulterModule.register(uploadOptions)],
+  exports: [PeopleService],
 })
 export class PeopleModule {}
