@@ -9,7 +9,7 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestj
 import { uplaodImageDto } from '../upload/dto/upload-image.dto';
 
 @ApiTags('Cloudinary Image Upload')
-@Controller('api/v1/cloudinary/upload')
+@Controller('cloudinary/upload')
 export class CloudinaryController {
     constructor(private readonly cloudinaryService: CloudinaryService) { }
 
