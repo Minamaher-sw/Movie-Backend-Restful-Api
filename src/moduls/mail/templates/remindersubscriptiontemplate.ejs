@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Subscription Expiry Reminder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .header {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+    .content {
+      font-size: 16px;
+      color: #555555;
+      line-height: 1.5;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #999999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Hi {{name}},</div>
+    <div class="content">
+      We wanted to remind you that your subscription will expire in <strong>{{daysLeft}} day{{#unless daysLeft==1}}s{{/unless}}</strong>.
+      <br><br>
+      To continue enjoying our services without interruption, please renew your subscription before it expires.
+      <br><br>
+      <a href="https://yourdomain.com/renew" class="cta-button">Renew Now</a>
+    </div>
+    <div class="footer">
+      &copy; {{currentYear}} Your Company. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
