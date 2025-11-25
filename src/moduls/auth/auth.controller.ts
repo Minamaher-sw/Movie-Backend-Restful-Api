@@ -142,6 +142,7 @@ export class AuthController {
   })
   @Get('verify-email')
   public async verifyEmail(@Query() query: { token: string; email: string }) {
+    console.log(query)
     if (!query.token || !query.email) {
       throw new BadRequestException(
         'Token and email are required for verification',
