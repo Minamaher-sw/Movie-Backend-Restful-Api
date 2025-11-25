@@ -67,6 +67,7 @@ export class AuthService {
 
   public async verifyEmail(token: string, email: string): Promise<boolean> {
     const user = await this.usersService.findByEmail(email);
+    console.log(user)
     if (!user || !user.verificationToken) {
       throw new UnauthorizedException("User not found");
     }
