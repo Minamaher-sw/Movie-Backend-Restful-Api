@@ -48,6 +48,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:4200',
+      'http://localhost:5200',
       'https://movieapp-frontend-nine.vercel.app',
     ],
     credentials: true,
