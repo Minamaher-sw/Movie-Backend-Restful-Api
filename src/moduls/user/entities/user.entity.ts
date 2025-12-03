@@ -74,7 +74,7 @@ export class UserEntity {
   role: UserRole;
 
   @ApiProperty({ example: false, description: 'Indicates whether the user has verified their account' })
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: true })
   isVerified: boolean;
 
   @ApiProperty({ example: 'verification-token-123', description: 'Token used for account verification', required: false })
