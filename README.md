@@ -1,124 +1,81 @@
-# MovieApp — NestJS Backend (v0.0.1)
 
-A production-ready backend for MovieApp, a movie streaming and subscription platform built with NestJS 11 and TypeScript.
+# 🎬 MovieApp — NestJS Backend
 
-## Overview
+> A production-ready, full-featured backend for a movie streaming and subscription platform built with modern technologies.
 
-This backend provides a complete, modular implementation featuring authentication, media uploads, subscription and payment flows, role-based access control, rate limiting, email notifications, OpenAPI documentation, and comprehensive test coverage.
+[![NestJS](https://img.shields.io/badge/NestJS-11-red?logo=nestjs)](https://nestjs.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?logo=mysql)](https://www.mysql.com)
+[![License](https://img.shields.io/badge/License-UNLICENSED-gray)](#license)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](#contributing)
 
-## Key Features
+---
 
-- **Framework**: NestJS 11 + TypeScript with modular, domain-driven architecture
-- **Database**: TypeORM + MySQL with auto-sync in development
-- **Authentication**: JWT (access and refresh tokens) with role-based guards
-- **Media Management**: Cloudinary integration for uploads
-- **Email**: Nodemailer with EJS templating for transactional messages
-- **API Protection**: Per-endpoint rate limiting via @nestjs/throttler
-- **Documentation**: Swagger/OpenAPI at `/api/v1/swagger`
-- **Validation & Serialization**: Global exception handling and serialization
-- **Security**: Helmet, CORS, cookie-parser middleware
-- **Testing**: Jest (unit) and Supertest (E2E)
+## 📋 Overview
 
-## Prerequisites
+A comprehensive backend solution for MovieApp, featuring modular domain-driven architecture with JWT authentication, role-based access control, Cloudinary media integration, subscription/payment flows, rate limiting, email notifications, OpenAPI documentation, and extensive test coverage.
 
-- Node.js ≥ 18 (22 recommended)
-- MySQL 8.0+
-- Cloudinary account
-- SMTP service (Mailtrap recommended for development)
+---
 
-## Project Structure
+## ✨ Key Features
+
+- 🔐 **JWT Authentication** — Access & refresh tokens with role-based guards
+- 🎥 **Media Management** — Cloudinary integration for uploads
+- 💳 **Subscription & Payments** — Complete subscription and payment workflows
+- 🛡️ **Security** — Rate limiting, Helmet, CORS, JWT validation
+- 📧 **Email Notifications** — Nodemailer with EJS templating
+- 📚 **API Documentation** — Swagger/OpenAPI at `/api/v1/swagger`
+- ✅ **Comprehensive Testing** — Jest (unit) & Supertest (E2E)
+- 🏗️ **Modular Architecture** — Domain-driven design with scalable structure
+- 📊 **Database** — TypeORM + MySQL with auto-sync in development
+- 🚀 **Production-Ready** — Global exception handling, serialization, and validation
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Runtime** | Node.js ≥ 18 |
+| **Framework** | NestJS 11 |
+| **Language** | TypeScript 5.0 |
+| **Database** | MySQL 8.0 + TypeORM |
+| **Authentication** | JWT (jsonwebtoken) |
+| **Media** | Cloudinary |
+| **Email** | Nodemailer + EJS |
+| **Validation** | class-validator, class-transformer |
+| **API Docs** | Swagger/OpenAPI |
+| **Testing** | Jest, Supertest |
+| **Code Quality** | ESLint, Prettier |
+| **Security** | Helmet, CORS, Rate Limiting |
+
+---
+
+## 📦 Prerequisites
+
+- **Node.js** ≥ 18 (22 recommended)
+- **MySQL** 8.0+
+- **npm** or **yarn**
+- **Cloudinary** account
+- **SMTP Service** (Mailtrap recommended for development)
+
+---
+
+## 🚀 Installation & Startup
+
+### Step 1: Clone & Install Dependencies
+```bash
+git clone <repository-url>
+cd movieapp-nestjs-backend
+npm install
 ```
-movieapp-nestjs-backend/
-├── dist/                          # Compiled output
-├── env/
-│   ├── .development.env           # Development environment variables
-│   ├── .development.env.example   # Development template
-│   ├── .production.env            # Production environment variables
-│   └── .test.env                  # E2E testing environment
-├── src/
-│   ├── app.module.ts              # Root application module
-│   ├── main.ts                    # Application entry point
-│   ├── common/                    # Shared utilities
-│   │   ├── filters/               # Exception filters
-│   │   │   └── query-exception.filter.ts
-│   │   ├── middleware/            # Custom middleware
-│   │   │   └── logger.middleware.ts
-│   │   ├── interceptors/          # Response/request interceptors
-│   │   │   └── serializer.interceptor.ts
-│   │   ├── decorators/            # Custom decorators
-│   │   │   └── auth.decorator.ts
-│   │   ├── guards/                # Authentication & authorization
-│   │   │   ├── jwt.guard.ts
-│   │   │   └── roles.guard.ts
-│   │   └── utils/                 # Helper functions
-│   │       └── helpers.ts
-│   ├── config/                    # Configuration modules
-│   │   ├── database.config.ts
-│   │   ├── jwt.config.ts
-│   │   ├── cloudinary.config.ts
-│   │   └── mailer.config.ts
-│   └── modules/                   # Feature modules (domain-driven)
-│       ├── auth/
-│       │   ├── auth.module.ts
-│       │   ├── auth.controller.ts
-│       │   ├── auth.service.ts
-│       │   ├── dto/
-│       │   │   ├── login.dto.ts
-│       │   │   └── register.dto.ts
-│       │   └── entities/
-│       │       └── auth.entity.ts
-│       ├── user/
-│       │   ├── user.module.ts
-│       │   ├── user.controller.ts
-│       │   ├── user.service.ts
-│       │   ├── dto/
-│       │   │   └── update-user.dto.ts
-│       │   └── entities/
-│       │       └── user.entity.ts
-│       ├── movie/
-│       │   ├── movie.module.ts
-│       │   ├── movie.controller.ts
-│       │   ├── movie.service.ts
-│       │   ├── dto/
-│       │   │   └── create-movie.dto.ts
-│       │   └── entities/
-│       │       └── movie.entity.ts
-│       ├── subscription/
-│       │   ├── subscription.module.ts
-│       │   ├── subscription.controller.ts
-│       │   ├── subscription.service.ts
-│       │   ├── dto/
-│       │   │   └── create-subscription.dto.ts
-│       │   └── entities/
-│       │       └── subscription.entity.ts
-│       ├── payment/
-│       │   ├── payment.module.ts
-│       │   ├── payment.controller.ts
-│       │   ├── payment.service.ts
-│       │   ├── dto/
-│       │   │   └── create-payment.dto.ts
-│       │   └── entities/
-│       │       └── payment.entity.ts
-│       └── upload/
-│           ├── upload.module.ts
-│           ├── upload.controller.ts
-│           ├── upload.service.ts
-│           ├── dto/
-│           │   └── upload.dto.ts
-│           └── entities/
-│               └── upload.entity.ts
-├── test/                          # E2E test suite
-│   ├── app.e2e-spec.ts
-│   └── fixtures/                  # Test data & utilities
-├── .gitignore
-├── package.json
-├── tsconfig.json
-├── nest-cli.json
-└── README.md
-```
-## Environment Configuration
 
-Create `env/.development.env` from the example:
+### Step 2: Configure Environment Variables
+```bash
+cp env/.development.env.example env/.development.env
+```
+
+Edit `env/.development.env` with your credentials:
 
 ```env
 NODE_ENV=development
@@ -148,104 +105,180 @@ MAIL_PASS=your_mailtrap_pass
 NODEMAILER_FROM="MovieApp <no-reply@movieapp.com>"
 ```
 
-## Installation & Startup
-
+### Step 3: Run Development Server
 ```bash
-# Install dependencies
-npm install
-
-# Configure environment
-cp env/.development.env.example env/.development.env
-# Edit env/.development.env with your credentials
-
-# Development (with hot reload)
 npm run start:dev
-
-# Production build and start
-npm run build
-npm run start:prod
 ```
 
-**Server**: `http://localhost:3001` (adjust port as configured)
+**Server**: `http://localhost:3001`
 
-## Available Scripts
+---
+
+## 📜 Available Scripts
 
 | Script | Purpose |
 |--------|---------|
 | `start:dev` | Development server with hot reload |
-| `build` | Production build |
+| `build` | Production build compilation |
 | `start:prod` | Run production build |
-| `lint` | Run ESLint |
+| `lint` | Run ESLint analysis |
 | `format` | Format code with Prettier |
 | `test` | Run unit tests |
-| `test:cov` | Generate coverage report |
+| `test:cov` | Generate test coverage report |
 | `test:e2e` | Run E2E tests |
 
-## Testing
+---
 
-- **Unit Tests**: Colocated as `*.spec.ts` files. Run: `npm run test`
-- **Coverage**: `npm run test:cov`
-- **E2E Tests**: Located in `/test` directory using Supertest and `.test.env`. Run: `npm run test:e2e`
+## 🏗️ Project Structure
 
-## Rate Limiting
+```
+movieapp-nestjs-backend/
+├── dist/                          # Compiled output
+├── env/
+│   ├── .development.env           # Development variables
+│   ├── .development.env.example   # Development template
+│   ├── .production.env            # Production variables
+│   └── .test.env                  # E2E testing variables
+├── src/
+│   ├── app.module.ts              # Root module
+│   ├── main.ts                    # Entry point
+│   ├── common/                    # Shared utilities
+│   │   ├── filters/               # Exception filters
+│   │   ├── middleware/            # Custom middleware
+│   │   ├── interceptors/          # Interceptors
+│   │   ├── decorators/            # Custom decorators
+│   │   ├── guards/                # Auth guards
+│   │   └── utils/                 # Helpers
+│   ├── config/                    # Configuration
+│   │   ├── database.config.ts
+│   │   ├── jwt.config.ts
+│   │   ├── cloudinary.config.ts
+│   │   └── mailer.config.ts
+│   └── modules/                   # Feature modules
+│       ├── auth/                  # Authentication
+│       ├── user/                  # User management
+│       ├── movie/                 # Movie catalog
+│       ├── subscription/          # Subscriptions
+│       ├── payment/               # Payments
+│       └── upload/                # Media uploads
+├── test/                          # E2E tests
+│   ├── app.e2e-spec.ts
+│   └── fixtures/                  # Test utilities
+├── package.json
+├── tsconfig.json
+├── nest-cli.json
+└── README.md
+```
 
-Global rate limiting enforced via `@nestjs/throttler`:
+---
 
-| Area | Limit/min | Use Case |
-|------|-----------|----------|
-| default | 10 | General API |
-| auth | 5 | Login / registration |
-| movie | 20 | Movie browsing |
-| user | 15 | Profile operations |
+## 🔒 Rate Limiting
 
-Use `@SkipThrottle()` decorator to exempt specific routes.
+Global rate limiting via `@nestjs/throttler`:
 
-## Security
+| Endpoint | Limit/min | Purpose |
+|----------|-----------|---------|
+| General API | 10 | Default rate limit |
+| Auth (login/register) | 5 | Prevent brute force |
+| Movie browsing | 20 | Media operations |
+| User profiles | 15 | Profile updates |
 
-- Rate limiting with configurable thresholds
-- Sensitive data exclusion via `ClassSerializerInterceptor`
-- Query error handling via `QueryExceptionFilter`
-- Selective request logging
-- CORS with restricted origins (localhost, Vercel)
-- Security headers via Helmet
-- Cookie parsing and management
+Use `@SkipThrottle()` decorator to bypass specific routes.
 
-## Development Guidelines
+---
 
-- Keep controllers focused on routing and responses
-- Place business logic in services
-- Validate inputs using DTOs and `class-validator`
-- Add features as modules in `src/modules/`
-- Share utilities in `src/common/`
+## 🧪 Testing
 
-## Contributing
+### Unit Tests
+```bash
+npm run test
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Write tests (unit and E2E where applicable)
-4. Run: `npm run lint && npm run test && npm run test:e2e`
-5. Submit a pull request with a clear description
+### Coverage Report
+```bash
+npm run test:cov
+```
 
-## API Documentation
+### E2E Tests
+```bash
+npm run test:e2e
+```
 
-Swagger UI is available at: `http://localhost:3001/api/v1/swagger`
+Tests are colocated as `*.spec.ts` files. E2E tests use `.test.env` to prevent data pollution.
+
+---
+
+## 📖 API Documentation
+
+Interactive Swagger UI available at:
+```
+http://localhost:3001/api/v1/swagger
+```
 
 Includes endpoint definitions, DTOs, request/response examples, and Bearer token authentication.
 
-## License
+---
 
-UNLICENSED (private project). To open-source, add a LICENSE file (MIT, Apache 2.0, or GPL) and update this section.
+## 🔐 Security Features
 
-## Additional Resources
+- ✅ JWT authentication with refresh tokens
+- ✅ Role-based access control (RBAC)
+- ✅ Per-endpoint rate limiting
+- ✅ Helmet security headers
+- ✅ CORS protection (localhost, Vercel)
+- ✅ Sensitive data exclusion via serialization
+- ✅ Query error handling
+- ✅ Cookie-based session management
 
-- Configure Cloudinary and SMTP credentials before testing uploads and email features
-- Use `.test.env` for E2E testing to prevent data pollution
-- For Docker, CI/CD, seed scripts, or Postman collections, see planned enhancements below
+---
 
-## Roadmap
+## 🤝 Contributing
 
-- Docker + docker-compose configuration
-- GitHub Actions CI/CD pipeline
-- Database seed scripts for genres and movies
-- Postman collection
-- Frontend integration guide (Angular/React)
+We welcome contributions! Follow these steps:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/your-feature`
+3. **Commit** changes: `git commit -m 'Add your feature'`
+4. **Write tests** for new features (unit + E2E where applicable)
+5. **Run checks**:
+    ```bash
+    npm run lint && npm run test && npm run test:e2e
+    ```
+6. **Push** to your fork and submit a **Pull Request**
+
+---
+
+## 🗺️ Roadmap
+
+- 🐳 Docker & docker-compose configuration
+- 🔄 GitHub Actions CI/CD pipeline
+- 🌱 Database seed scripts
+- 📮 Postman API collection
+- 🎨 Frontend integration guide (Angular/React)
+- 📱 Mobile app support
+
+---
+
+## 📄 License
+
+**UNLICENSED** (private project)
+
+To open-source: Add a LICENSE file (MIT, Apache 2.0, or GPL) and update this section.
+
+---
+
+## 👨‍💻 Author
+
+**Mina Maher**
+
+For questions or support, feel free to reach out!
+
+---
+
+## 🔗 Related Resources
+
+- Configure Cloudinary and SMTP before testing uploads/emails
+- Use `.test.env` for E2E testing
+- Refer to [NestJS Docs](https://docs.nestjs.com) for framework details
+- Check [TypeORM Docs](https://typeorm.io) for database queries
+
